@@ -24,14 +24,7 @@
   powerManagement.enable = lib.mkForce false;
   nix.enable = lib.mkForce false;
 
-  users.extraUsers = {
-    tux = {
-      description = "my beloved";
-      isNormalUser = true;
-      extraGroups = [ "video" "audio" "network" "power" "users" "wheel" ];
-    };
-  };
   services.cage.enable = true;
   services.cage.program = "${pkgs.superTuxKart}/bin/supertuxkart";
-  services.cage.user = "tux";
+  services.cage.user = "nixos";
 }
