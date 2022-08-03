@@ -1,7 +1,8 @@
 # Proof grapejuice is by retards!
 { pkgs, lib, ... }: {
-  hardware.nvidia.open = true;
+  nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = lib.mkForce true;
   hardware.nvidia.modesetting.enable = true;
 
   hardware.opengl.enable = true;
