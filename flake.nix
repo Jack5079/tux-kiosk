@@ -1,19 +1,27 @@
 {
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
-  outputs = { self, nixpkgs, ... }: {
-    packages.x86_64-linux.grapejuice = (nixpkgs.lib.nixosSystem {
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  outputs = { nixpkgs, self, ... }: {
+    nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix"
-        ./grape.nix
+        {
+          imports = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-base.nix"
+            ./configuration.nix
+          ];
+        }
       ];
-    }).config.system.build.isoImage;
-    packages.x86_64-linux.tux = (nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-base.nix"
-        ./tux.nix
-      ];
-    }).config.system.build.isoImage;
+    };
+    packages.x86_64-linux = {
+      iso = self.nixosConfigurations.iso.config.system.build.isoImage;
+      vm = self.nixosConfigurations.iso.config.system.build.vm;
+    };
+
+    apps = {
+      vm = {
+        type = "app";
+        program = "${self.packages.x86_64-linux.vm}/bin/run-nixos-vm";
+      };
+    };
   };
 }
