@@ -7,6 +7,7 @@
         {
           imports = [
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-base.nix"
+            # "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix"
             ./configuration.nix
           ];
         }
